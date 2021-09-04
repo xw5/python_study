@@ -18,7 +18,15 @@ class SeleniumDownloadMiddleware(object):
 
     def process_request(self, request, spider):
         self.driver.get(request.url)
-        time.sleep(5)
+        time.sleep(3)
+        if "search/detail" not in request.url:
+            count = 0
+            while True:
+                self.driver.execute_script("window.scrollBy(0,9999999)")
+                time.sleep(5)
+                count += 1
+                if count < 5:
+                    break
         source = self.driver.page_source
         print(source)
         response = HtmlResponse(url=self.driver.current_url, body=source, request=request, encoding='utf-8')

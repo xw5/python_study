@@ -13,7 +13,8 @@ class ImgEyeSpider(scrapy.Spider):
 
     def parse_detail(self, response):
         img_upload = response.xpath('//div[@id="toolbar"]/span[contains(@class, "btn-download")]/@href').extract()
-        for item in img_upload:
-            item_result = BaiduImgEyeItem()
-            item_result['image_urls'] = [response.urljoin(item)]
-            yield item_result
+        img_name = response.xpath('//div[@id="picInfoPnl"]//div[@class="pic-title"]/span/text()').extract()
+        item_result = BaiduImgEyeItem()
+        item_result['imgurl'] = response.urljoin(img_upload[0])
+        item_result['name'] = img_name[0]
+        yield item_result

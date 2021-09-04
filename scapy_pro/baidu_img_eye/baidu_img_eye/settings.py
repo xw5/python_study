@@ -64,7 +64,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy.pipelines.images.ImagesPipeline': 1
+   'baidu_img_eye.pipelines.BaiduImgEyeDownloadPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -87,4 +87,4 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-IMAGES_STORE = 'E:\\img'
+IMAGES_STORE = 'E:\img'

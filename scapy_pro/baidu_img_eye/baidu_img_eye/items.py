@@ -8,4 +8,5 @@ import scrapy
 
 class BaiduImgEyeItem(scrapy.Item):
     # define the fields for your item here like:
-    image_urls = scrapy.Field()
+    imgurl = scrapy.Field()
+    name = scrapy.Field()
