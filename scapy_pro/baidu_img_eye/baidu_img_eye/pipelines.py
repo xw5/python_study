@@ -7,7 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import scrapy
-
+# from scrapy.exceptions import DropItem
 
 class BaiduImgEyePipeline:
     def process_item(self, item, spider):
@@ -16,8 +16,8 @@ class BaiduImgEyePipeline:
 
 class BaiduImgEyeDownloadPipeline:
     def get_media_requests(self, item, spider):
-        for image_url in item.imgurl:
-            yield scrapy.Request(image_url, meta={'name': item.name})
+        print('-----', item)
+        yield scrapy.Request(item.imgurl, meta={'name': item.name})
 
     def file_path(self, request, response, spider):
         extstr = request.url.split('.')[-1]
