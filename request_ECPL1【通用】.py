@@ -8,8 +8,8 @@ url = 'https://ygjy.ismartwork.cn/ecs/mapp/restful/training/getPracticeTopicList
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) YGHome/4.7.0 Chrome/89.0.4389.82 Electron/12.0.1 Safari/537.36',
-    'Cookie': 'ecpDataContext.tokenId=6d919a6193814997950733983c599b51',
-    'ecs_token': '6d919a6193814997950733983c599b51',
+    'Cookie': 'ecpDataContext.tokenId=49d505eb4c1c49b7a4b7b1e87d2a4e0e',
+    'ecs_token': '49d505eb4c1c49b7a4b7b1e87d2a4e0e',
     'Sec-Fetch-Site': 'same-origin',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Dest': 'empty',
@@ -22,8 +22,8 @@ resultConfig = []
 def request_by_page(pageNo):
     params = {
         'pageNo': pageNo,
-        'pageSize': 100,
-        'categoryId': '12c9d95f15814072869fd79cefbc4a2f',
+        'pageSize': 20,
+        'categoryId': 'c699eda280e04eccbf3f0f053785847e',
         'trainingType': 1
     }
     res = requests.get(url=url, params=params, headers=headers, verify=False)
@@ -41,11 +41,11 @@ def request_by_page(pageNo):
 
 
 def write_file():
-    with open('./【通用】研发质量能力认证练习20210823.js', 'w', encoding='utf8') as fp:
+    with open('./【通用】ECPL1认证.js', 'w', encoding='utf8') as fp:
         fp.write(json.dumps(resultConfig, indent=4, ensure_ascii=False))
 
 
-while totalPageNo < 14:
+while totalPageNo < 8:
     request_by_page(totalPageNo)
     totalPageNo = totalPageNo + 1
     time.sleep(5)

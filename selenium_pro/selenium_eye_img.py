@@ -32,5 +32,5 @@ for item in imgUrl:
     print(imgName, ext)
     imgResultUrl = 'https://image.baidu.com'+uploadImg
     response = requests.get(imgResultUrl, allow_redirects = False, headers=headers)
-    with open('./img/{}.{}'.format(imgName, ext), 'wb') as f:
+    with open('./img{}/{}.{}'.format(time.time(), imgName, ext), 'wb') as f:
         f.write(response.content)
