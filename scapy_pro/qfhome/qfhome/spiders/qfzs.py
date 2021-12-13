@@ -5,8 +5,8 @@ from scrapy.linkextractors import LinkExtractor
 
 class QfzsSpider(scrapy.Spider):
     name = 'qfzs'
-    allowed_domains = ['shenzhen.qfang.com']
-    start_urls = ['https://shenzhen.qfang.com/gbasale/b3-b4-k6-pfy10-pty120-f1']
+    allowed_domains = ['qfang.com']
+    start_urls = ['https://zhongshan.qfang.com/sale/sanxianga/a13-a14-a15-b3-b4-p11-p12-p13']
 
     def parse(self, response):
         for item in response.css('.list-result .items'):
@@ -31,9 +31,12 @@ class QfzsSpider(scrapy.Spider):
             else:
                 home_item['tag'] = "/".join(item.css('.house-tags .default::text').extract())
             yield home_item
-            le = LinkExtractor(restrict_css='.page-turning-index')
-            links = le.extract_links(response)
-            for link in links:
-                yield scrapy.Request(link.url)
+        le = LinkExtractor(restrict_css='.page-turning-index a')
+        links = le.extract_links(response)
+        next_urls = [link.url for link in links]
+        print('-----', next_urls)
+        for link in next_urls:
+            print('------', link)
+            yield scrapy.Request(link, callback=self.parse)
 
 

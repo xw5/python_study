@@ -1,0 +1,17 @@
+import os
+
+path = './img'
+count = 1
+for file in os.listdir(path):
+    # os.rename(os.path.join(path,file),os.path.join(path,str(count)+".jpg"))
+    # count+=1
+    fileArr = file.split('.')
+    print(fileArr)
+    fileName = fileArr[0]
+    try:
+        ext = fileArr[1]
+        if ext != 'jpg':
+            originPath = os.path.join(path, file)
+            file_path = os.path.join(path, fileName + str(count) + '.jpg')
+            os.rename(originPath, file_path)
+            count += 1
