@@ -1,6 +1,6 @@
 import re
 
-pattern = re.compile(r'IDS_[\w\W]+"(?=\n)')
+pattern = re.compile(r'IDS_[\w\W]+?"(?=\n)')
 
 result = []
 with open("test2.txt", "r", encoding='gbk') as f:  # 打开文件
@@ -8,7 +8,9 @@ with open("test2.txt", "r", encoding='gbk') as f:  # 打开文件
     it = re.finditer(pattern, data)
     for match in it:
         item_str = match.group()
-        pattern_split = r'\s+'
+        print('-'*20)
+        print(item_str)
+        pattern_split = r'\s+(?=")'
         ite_str_list = re.split(pattern_split, item_str)
         # result.extend(ite_str_list)
         result.append(ite_str_list)
