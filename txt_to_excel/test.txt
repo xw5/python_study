@@ -1,0 +1,36 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_CYAN         BITMAP                  "rc\\bitmap9.bmp"
+IDB_BITMAP_RED          BITMAP                  "rc\\bitmap10.bmp"
+IDB_BITMAP_GREEN        BITMAP                  "rc\\bmp00001.bmp"
+IDB_BITMAP_BLACK        BITMAP                  "rc\\bmp00002.bmp"
+IDB_BITMAP_MAGENTA      BITMAP                  "rc\\bmp00003.bmp"
+IDB_BITMAP_BLUE         BITMAP                  "rc\\bitmap11.bmp"
+IDB_BITMAP_YELLOW       BITMAP                  "rc\\bitmap12.bmp"
+IDB_BITMAP_WHITE        BITMAP                  "rc\\bitmap13.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_STATIC_SAVE         "保存"
+    IDS_STATIC_EDIT         "删除"
+    IDS_STATIC_NUP          "多页"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_STATIC_PAPERTYPE    "纸张类型"
+    IDS_STATIC_COLLATE      "逐份"
+    IDS_STATIC_DEFAULT      "恢复默认设置"
+    IDS_RADIO_ALWAYS        "总是使用TrueType字体"
+    IDS_RADIO_SUBSTITUTE    "使用打印机字体代替TrueType字体"
+    IDS_CHECK_TRUETYPE_BMP  "以位图打印TrueType字体"
+    IDS_STATIC_ORDER        "排序"
+END
