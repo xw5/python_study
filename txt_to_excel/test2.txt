@@ -1,0 +1,6 @@
+
+    IDS_PAGE                "页码：%d"
+	IDS_PAGES				
+				"Page: %d"
+    IDS_MUTEX_FEEDSIZE_A3   "如果想使用长边进纸，请选择A4纸张。"
+    
