@@ -6,7 +6,7 @@ from scrapy.linkextractors import LinkExtractor
 class QfzsSpider(scrapy.Spider):
     name = 'qfzs'
     allowed_domains = ['qfang.com']
-    start_urls = ['https://zhongshan.qfang.com/sale/sanxianga/a13-a14-a15-b3-b4-p11-p12-p13']
+    start_urls = ['https://zhongshan.qfang.com/sale/sanxianga/a14-a15-a16-b3-b4-b5-p11-p12-p13-r2']
 
     def parse(self, response):
         for item in response.css('.list-result .items'):
