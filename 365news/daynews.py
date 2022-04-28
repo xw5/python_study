@@ -12,9 +12,15 @@ res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', heade
 selecter = etree.HTML(res.text)
 
 url = selecter.xpath("//li[@class='media_article']/a/@href")[0]
+dateStr = selecter.xpath("//li[@class='media_article']/div/p[@class='media_article_date']/text()")[0]
+dateStr = dateStr.replace("-", "")
+dateStr = dateStr.replace(":", "")
+dateStr = dateStr.split(" ")[0]
 
 print(url)
-time.sleep(random.random() * 3);
+print(dateStr)
+
+time.sleep(random.random() * 3)
 resDetail = requests.get(url=url, headers=headers)
 
 selecterDetail = etree.HTML(resDetail.text)
@@ -22,3 +28,7 @@ selecterDetail = etree.HTML(resDetail.text)
 news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
 
 print(news)
+with open('./new.txt'.format(dateStr), 'w', encoding='utf-8') as f0:
+    f0.write('\n'.join(news[1:-1]))
+with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
+    f1.write('\n'.join(news[1:-1]))
