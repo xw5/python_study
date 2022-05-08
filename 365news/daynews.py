@@ -2,33 +2,49 @@ import requests
 from lxml import etree
 import time
 import random
+import os
+import datetime
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
-}
+os.chdir(r"E:\study\python\python_reptile\365news")
 
-res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers)
+def getNews():
 
-selecter = etree.HTML(res.text)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
+    }
 
-url = selecter.xpath("//li[@class='media_article']/a/@href")[0]
-dateStr = selecter.xpath("//li[@class='media_article']/div/p[@class='media_article_date']/text()")[0]
-dateStr = dateStr.replace("-", "")
-dateStr = dateStr.replace(":", "")
-dateStr = dateStr.split(" ")[0]
+    res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers)
 
-print(url)
-print(dateStr)
+    selecter = etree.HTML(res.text)
 
-time.sleep(random.random() * 3)
-resDetail = requests.get(url=url, headers=headers)
+    url = selecter.xpath("//li[@class='media_article']/a/@href")[0]
+    dateStr = selecter.xpath("//li[@class='media_article']/div/p[@class='media_article_date']/text()")[0]
+    dateStr = dateStr.replace("-", "")
+    dateStr = dateStr.replace(":", "")
+    dateStr = dateStr.split(" ")[0]
 
-selecterDetail = etree.HTML(resDetail.text)
+    print(url)
+    print(dateStr)
 
-news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
+    time.sleep(random.random() * 3)
+    resDetail = requests.get(url=url, headers=headers)
 
-print(news)
-with open('./new.txt'.format(dateStr), 'w', encoding='utf-8') as f0:
-    f0.write('\n'.join(news[1:-1]))
-with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
-    f1.write('\n'.join(news[1:-1]))
+    selecterDetail = etree.HTML(resDetail.text)
+
+    news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
+
+    print(news)
+    with open('./new.txt'.format(dateStr), 'w', encoding='utf-8') as f0:
+        f0.write('\n'.join(news[1:-1]))
+    with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
+        f1.write('\n'.join(news[1:-1]))
+
+curr_time = datetime.datetime.now()
+newsFileName = curr_time.strftime("%Y%m%d")
+
+# 判断今天新闻是否已经爬取过
+if os.path.exists(newsFileName):
+    pass
+else:
+    getNews()
+
