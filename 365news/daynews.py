@@ -16,7 +16,7 @@ def getNews():
     res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers)
 
     selecter = etree.HTML(res.text)
-    print(res.text);
+    # print(res.text)
     url = selecter.xpath("//div[@class='tab_content']/ul/li/a/@href")[0]
     dateStr = selecter.xpath("//div[@class='tab_content']/ul/li/div[@class='desc']/div/span/text()")[0]
     dateStr = dateStr.replace("-", "")
