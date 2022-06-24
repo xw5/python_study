@@ -16,9 +16,9 @@ def getNews():
     res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers)
 
     selecter = etree.HTML(res.text)
-
-    url = selecter.xpath("//li[@class='media_article']/a/@href")[0]
-    dateStr = selecter.xpath("//li[@class='media_article']/div/p[@class='media_article_date']/text()")[0]
+    print(res.text);
+    url = selecter.xpath("//div[@class='tab_content']/ul/li/a/@href")[0]
+    dateStr = selecter.xpath("//div[@class='tab_content']/ul/li/div[@class='desc']/div/span/text()")[0]
     dateStr = dateStr.replace("-", "")
     dateStr = dateStr.replace(":", "")
     dateStr = dateStr.split(" ")[0]
@@ -35,9 +35,9 @@ def getNews():
 
     print(news)
     with open('./new.txt'.format(dateStr), 'w', encoding='utf-8') as f0:
-        f0.write('\n'.join(news[1:-1]))
+        f0.write('\n'.join(news[1:]))
     with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
-        f1.write('\n'.join(news[1:-1]))
+        f1.write('\n'.join(news[1:]))
 
 curr_time = datetime.datetime.now()
 newsFileName = curr_time.strftime("%Y%m%d")
