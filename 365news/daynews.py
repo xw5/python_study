@@ -4,6 +4,7 @@ import time
 import random
 import os
 import datetime
+from txtToAudioModule import textToAudio
 
 os.chdir(r"E:\study\python\python_reptile\365news")
 
@@ -34,10 +35,12 @@ def getNews():
     news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
 
     print(news)
-    with open('./new.txt'.format(dateStr), 'w', encoding='utf-8') as f0:
-        f0.write('\n'.join(news[1:]))
+    newContent = '\n'.join(news[1:])
+    with open('./new.txt', 'w', encoding='utf-8') as f0:
+        f0.write(newContent)
     with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
-        f1.write('\n'.join(news[1:]))
+        f1.write(newContent)
+    textToAudio(newContent, dateStr)
 
 curr_time = datetime.datetime.now()
 newsFileName = curr_time.strftime("%Y%m%d")
