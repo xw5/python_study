@@ -4,7 +4,7 @@ import time
 import random
 import os
 import datetime
-from txtToAudioModule import textToAudio
+# from txtToAudioModule import textToAudio
 
 os.chdir(r"E:\study\python\python_reptile\365news")
 
@@ -40,7 +40,7 @@ def getNews():
         f0.write(newContent)
     with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
         f1.write(newContent)
-    textToAudio(newContent, '每日新闻')
+    # textToAudio(newContent, '每日新闻')
 
 curr_time = datetime.datetime.now()
 newsFileName = curr_time.strftime("%Y%m%d")
