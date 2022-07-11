@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
+
 browser = webdriver.Chrome(executable_path=r'E:\study\python\python_reptile\selenium_pro\chromedriver_win32\chromedriver.exe')
 
 browser.get("https://www.163.com/dy/media/T1603594732083.html")
@@ -20,4 +21,3 @@ browser.get("https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_a
 
 element_xg = browser.find_element(By.CLASS_NAME, 'VirusSummarySix_1-54-1_ZRHUKw')
 element_xg.screenshot('xg.png')
-
