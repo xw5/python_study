@@ -12,9 +12,9 @@ browser = webdriver.Chrome(executable_path=r'E:\study\python\python_reptile\sele
 
 browser.get("https://www.163.com/dy/media/T1603594732083.html")
 
-element = browser.find_element(By.XPATH, "//div[contains(@class,'m-viewpoint')][0]")
+element = browser.find_element(By.XPATH, "//div[contains(@class,'m-viewpoint')][1]")
 newUrl = element.get_attribute('data-href')
-browser.get(newUrl)
+browser.get('https://'+newUrl)
 
 # all_windows = browser.window_handles
 # browser.switch_to.window(all_windows[-1])
@@ -23,5 +23,5 @@ element_news.screenshot('news.png')
 
 browser.get("https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_aladin_banner")
 
-element_xg = browser.find_element(By.XPATH, "//div[@id='ptab-0']/div[0]")
+element_xg = browser.find_element(By.XPATH, "//div[@id='ptab-0']/div[1]")
 element_xg.screenshot('xg.png')
