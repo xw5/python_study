@@ -2,7 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 import time
-browser = webdriver.Chrome(executable_path='C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe')
+browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
 
 browser.get("https://www.baidu.com")
 
