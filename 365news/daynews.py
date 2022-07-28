@@ -5,7 +5,8 @@ import random
 import os
 import datetime
 # from txtToAudioModule import textToAudio
-
+import warnings
+warnings.filterwarnings("ignore")
 os.chdir(r"E:\study\python\python_reptile\365news")
 
 def getNews():
@@ -14,7 +15,7 @@ def getNews():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
     }
 
-    res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers)
+    res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers, verify=False)
 
     selecter = etree.HTML(res.text)
     # print(res.text)
@@ -28,7 +29,7 @@ def getNews():
     print(dateStr)
 
     time.sleep(random.random() * 3)
-    resDetail = requests.get(url=url, headers=headers)
+    resDetail = requests.get(url=url, headers=headers, verify=False)
 
     selecterDetail = etree.HTML(resDetail.text)
 
@@ -44,10 +45,12 @@ def getNews():
 
 curr_time = datetime.datetime.now()
 newsFileName = curr_time.strftime("%Y%m%d")
+print('今天是{}'.format(newsFileName))
+time.sleep(5)
 
 # 判断今天新闻是否已经爬取过
-if os.path.exists(newsFileName):
-    pass
+if os.path.exists('{}.txt'.format(newsFileName)):
+    print('已爬取过最新新闻')
 else:
     getNews()
 
