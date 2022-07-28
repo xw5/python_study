@@ -519,8 +519,6 @@ def SetControlPlace(uiName,elementName,x,y,w,h):
         elementName = G_UIElementAlias[uiName][elementName]
     Control = GetElement(uiName,elementName)
     if Control != None:
-        Control.place(x=0,y=0,width=0,height=0)
-        Control.place(relx=0,rely=0,relwidth=0,relheight=0)
         if type(x) == type(1.0):
             if type(y) == type(1.0):
                 if type(w) == type(1.0):

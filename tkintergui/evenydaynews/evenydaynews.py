@@ -36,7 +36,7 @@ class  evenydaynews:
         ComboBox_5["values"]=['网易365资讯简报','人民日报今日要闻']
         ComboBox_5.current(0)
         ComboBox_5.bind("<<ComboboxSelected>>",Fun.EventFunction_Adaptor(evenydaynews_cmd.ComboBox_5_onSelect,uiName=uiName,widgetName="ComboBox_5"))
-        Label_6 = tkinter.Label(Form_1,text="新闻源：",width = 10,height = 4)
+        Label_6 = tkinter.Label(Form_1,text="新闻源：")
         Fun.Register(uiName,'Label_6',Label_6)
         Fun.SetControlPlace(uiName,'Label_6',17,37,70,30)
         Label_6.configure(anchor = "w")
@@ -63,16 +63,16 @@ class  evenydaynews:
         Fun.Register(uiName,'Text_12',Text_12,'news_suffix')
         Fun.SetControlPlace(uiName,'Text_12',17,541,417,50)
         Text_12.configure(relief = "sunken")
-        Label_13 = tkinter.Label(Form_1,text="新闻后辍：",width = 10,height = 4)
+        Label_13 = tkinter.Label(Form_1,text="新闻后辍：")
         Fun.Register(uiName,'Label_13',Label_13)
         Fun.SetControlPlace(uiName,'Label_13',20,519,64,22)
         Label_13.configure(relief = "flat")
-        Label_9 = tkinter.Label(Form_1,text="发送用户：",width = 10,height = 4)
+        Label_9 = tkinter.Label(Form_1,text="发送用户：")
         Fun.Register(uiName,'Label_9',Label_9)
         Fun.SetControlPlace(uiName,'Label_9',470,80,70,29)
         Label_9.configure(anchor = "w")
         Label_9.configure(relief = "flat")
-        Button_8 = tkinter.Button(Form_1,text="开始",width = 10,height = 4)
+        Button_8 = tkinter.Button(Form_1,text="开始")
         Fun.Register(uiName,'Button_8',Button_8,'start')
         Fun.SetControlPlace(uiName,'Button_8',579,37,100,30)
         Button_8.configure(command=lambda:evenydaynews_cmd.Button_8_onCommand(uiName,"Button_8"))
@@ -93,7 +93,7 @@ class  evenydaynews:
         Text_16_Scrollbar.config(command = Text_16.yview)
         Text_16.config(yscrollcommand = Text_16_Scrollbar.set)
         Fun.Register(uiName,'Text_16_Scrollbar',Text_16_Scrollbar)
-        Button_17 = tkinter.Button(Form_1,text="微信路径",width = 10,height = 4)
+        Button_17 = tkinter.Button(Form_1,text="微信路径")
         Fun.Register(uiName,'Button_17',Button_17,'select_exe')
         Fun.SetControlPlace(uiName,'Button_17',601,109,78,30)
         Button_17.configure(command=lambda:evenydaynews_cmd.Button_17_onCommand(uiName,"Button_17"))
@@ -102,6 +102,8 @@ class  evenydaynews:
         #Call Form_1's OnLoad Function
         evenydaynews_cmd.Form_1_onLoad(uiName)
         #Add Some Logic Code Here: (Keep This Line of comments)
+
+
 #Create the root of Kinter 
 if  __name__ == '__main__':
     root = tkinter.Tk()

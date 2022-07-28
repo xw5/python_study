@@ -37,11 +37,10 @@ def Button_8_onCommand(uiName,widgetName):
     user_type_index = Fun.GetSelectIndex(uiName, 'user_type')
     news_origin = news_origins[news_origin_index]
     user_type = user_types[user_type_index]
-    requestThreading = null
     if news_origin_index == 0:
-        requestThreading = threading.Thread(target=Request365, name='thread0', args=(news_origin, uiName))
+        requestThreading = threading.Thread(target=Request365, args=(news_origin, uiName))
     else:
-        requestThreading = threading.Thread(target=RequestPeople, name='thread1', args=(news_origin, uiName)) 
+        requestThreading = threading.Thread(target=RequestPeople, args=(news_origin, uiName)) 
     requestThreading.start()        
     print(news_origin, user_type)
 def ComboBox_14_onSelect(event,uiName,widgetName):
@@ -52,3 +51,4 @@ def Button_17_onCommand(uiName,widgetName):
     exe_path = tkinter.filedialog.askopenfilename()
     print(exe_path)
     Fun.SetText(uiName, 'exe_path', exe_path)
+
