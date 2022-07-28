@@ -33,7 +33,7 @@ def getTimeStr():
     curr_time = datetime.datetime.now()
     newsFileName = curr_time.strftime("%Y%m%d%H%M%S")
     return newsFileName
-def start_copy(orign_path, target_path, maxRows, subpackagePre):
+def start_copy(orign_path, target_path, maxRows, subpackagePre, uiName, callback):
     # 生成时间字符串
     # curr_time = datetime.datetime.now()
     # newsFileName = curr_time.strftime("%Y%m%d%H%M%S")
@@ -57,11 +57,13 @@ def start_copy(orign_path, target_path, maxRows, subpackagePre):
     copyFileCount = 0
     copyErrorFileCount = 0
     repeatIndex = 0
+    total = len(files)
     # zipHandle = ZipFile('{}\\{}.zip'.format(target_path, newFileDir), 'w')
     for file in files:
         fileName = file.split('\\')[-1]
         fileNameArr = fileName.split('.')
         print(file)
+        callback(uiName, total, copyFileCount, copyErrorFileCount)
         try:
             count = len(open(file, 'r', encoding='utf-8').readlines())
             codeLines = codeLines + count
@@ -94,3 +96,4 @@ def start_copy(orign_path, target_path, maxRows, subpackagePre):
     print("=" * 20)
     return { 'copyFileNames': copyFileNames, 'copyFileCount': copyFileCount, 'copyErrorFileNames': copyErrorFileNames, 'copyErrorFileCount': copyErrorFileCount }
 # start_copy('D:\work\workspace\microLearning_web\src', 'D:\work\workspace\ok', 300000, 'code')
+
