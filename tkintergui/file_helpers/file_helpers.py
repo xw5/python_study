@@ -23,14 +23,14 @@ class  file_helpers:
         if isTKroot == True:
             root.title("文件助手")
             root.resizable(False,False)
-            root.wm_attributes("-transparentcolor","#ffffff")
+            root.wm_attributes("-transparentcolor","#ffff00")
             if os.path.exists("F:/python_study/tkintergui/file_helpers/file-sync.ico"):
                 root.iconbitmap("F:/python_study/tkintergui/file_helpers/file-sync.ico")
             Fun.CenterDlg(uiName,root,667,639)
             root['background'] = '#efefef'
         Form_1= tkinter.Canvas(root,width = 10,height = 4)
         Form_1.pack(fill=BOTH,expand=True)
-        Form_1.configure(bg = "#ffffff")
+        Form_1.configure(bg = "#ffff00")
         Fun.SetRootRoundRectangle(Form_1,0,0,667,639,radius=5,fill='#efefef',outline='#ffffff',width=0)
         Form_1.configure(highlightthickness = 0)
         Fun.Register(uiName,'Form_1',Form_1)
