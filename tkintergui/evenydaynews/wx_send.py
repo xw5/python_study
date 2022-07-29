@@ -2,13 +2,11 @@
 import pyautogui
 import pyperclip
 import time
-
 def enter_text(content):
     pyperclip.copy(content)
     time.sleep(1)
     # pyperclip.paste()
     pyautogui.hotkey('ctrl', 'v')
-
 def send(users, content, callback = None):
     users_len = len(users)
     for index, item in enumerate(users):
@@ -25,7 +23,7 @@ def send(users, content, callback = None):
         if callback:
             callback(users_len, index)
         print(users_len, index + 1)
-
 # time.sleep(5)
 # users = ['文件传输助手']
 # send(users, 'hello tkinter')
+
