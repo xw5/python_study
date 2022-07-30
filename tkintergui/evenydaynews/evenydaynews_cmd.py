@@ -10,6 +10,7 @@ import Fun
 ElementBGArray={}  
 ElementBGArray_Resize={} 
 ElementBGArray_IM={} 
+
 import io
 import time 
 import threading
@@ -66,6 +67,9 @@ def send_news(uiName):
     if len(news_content) == 0 or news_content == '\n':
         Fun.MessageBox('新闻内容不能为空！')
         return
+    news_suffix = Fun.GetText(uiName,'news_suffix')
+    if len(news_suffix) > 0 and news_content != '\n':
+        news_content = news_content + news_suffix
     # print('1='*30)
     # print(news_content)
     # 获取要发送的用户
@@ -137,4 +141,3 @@ def ComboBox_14_onSelect(event,uiName,widgetName):
     else:
         btn_type = user_type
     Fun.SetText(uiName, 'select_exe', '{}路径'.format(btn_type))
-

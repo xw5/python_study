@@ -14,8 +14,10 @@ import tkinter.font
 class  evenydaynews:
     def __init__(self,root,isTKroot = True):
         uiName = self.__class__.__name__
+        self.uiName = uiName
         Fun.Register(uiName,'UIClass',self)
         self.root = root
+        self.isTKroot = isTKroot
         Fun.Register(uiName,'root',root)
         style = evenydaynews_sty.SetupStyle()
         if isTKroot == True:
@@ -23,7 +25,7 @@ class  evenydaynews:
             Fun.CenterDlg(uiName,root,699,606)
             root['background'] = '#efefef'
         Form_1= tkinter.Canvas(root,width = 10,height = 4)
-        Form_1.place(x = 0,y = 0,width = 699,height = 606)
+        Form_1.pack(fill=BOTH,expand=True)
         Form_1.configure(bg = "#efefef")
         Form_1.configure(highlightthickness = 0)
         Fun.Register(uiName,'Form_1',Form_1)
@@ -43,19 +45,19 @@ class  evenydaynews:
         Label_6.configure(relief = "flat")
         Text_7 = tkinter.Text(Form_1)
         Fun.Register(uiName,'Text_7',Text_7,'news')
-        Fun.SetControlPlace(uiName,'Text_7',17,76,434,440)
+        Fun.SetControlPlace(uiName,'Text_7',17,76,404,435)
         Text_7.configure(relief = "sunken")
         Text_7_Scrollbar = tkinter.Scrollbar(Text_7,orient=tkinter.VERTICAL)
-        Text_7_Scrollbar.place(x = 414,y = 0,width = 20,height = 440)
+        Text_7_Scrollbar.place(x = 384,y = 0,width = 20,height = 435)
         Text_7_Scrollbar.config(command = Text_7.yview)
         Text_7.config(yscrollcommand = Text_7_Scrollbar.set)
         Fun.Register(uiName,'Text_7_Scrollbar',Text_7_Scrollbar)
         Text_10 = tkinter.Text(Form_1)
         Fun.Register(uiName,'Text_10',Text_10,'user_list')
-        Fun.SetControlPlace(uiName,'Text_10',463,147,216,331)
+        Fun.SetControlPlace(uiName,'Text_10',434,147,245,331)
         Text_10.configure(relief = "sunken")
         Text_10_Scrollbar = tkinter.Scrollbar(Text_10,orient=tkinter.VERTICAL)
-        Text_10_Scrollbar.place(x = 196,y = 0,width = 20,height = 331)
+        Text_10_Scrollbar.place(x = 225,y = 0,width = 20,height = 331)
         Text_10_Scrollbar.config(command = Text_10.yview)
         Text_10.config(yscrollcommand = Text_10_Scrollbar.set)
         Fun.Register(uiName,'Text_10_Scrollbar',Text_10_Scrollbar)
@@ -73,10 +75,10 @@ class  evenydaynews:
         Button_8.configure(command=lambda:evenydaynews_cmd.Button_8_onCommand(uiName,"Button_8"))
         Text_16 = tkinter.Text(Form_1)
         Fun.Register(uiName,'Text_16',Text_16,'exe_path')
-        Fun.SetControlPlace(uiName,'Text_16',463,76,216,37)
+        Fun.SetControlPlace(uiName,'Text_16',434,76,245,37)
         Text_16.configure(relief = "sunken")
         Text_16_Scrollbar = tkinter.Scrollbar(Text_16,orient=tkinter.VERTICAL)
-        Text_16_Scrollbar.place(x = 196,y = 0,width = 20,height = 37)
+        Text_16_Scrollbar.place(x = 225,y = 0,width = 20,height = 37)
         Text_16_Scrollbar.config(command = Text_16.yview)
         Text_16.config(yscrollcommand = Text_16_Scrollbar.set)
         Fun.Register(uiName,'Text_16_Scrollbar',Text_16_Scrollbar)
@@ -90,7 +92,7 @@ class  evenydaynews:
         Button_19.configure(command=lambda:evenydaynews_cmd.Button_19_onCommand(uiName,"Button_19"))
         Label_9 = tkinter.Label(Form_1,text="发送用户：")
         Fun.Register(uiName,'Label_9',Label_9)
-        Fun.SetControlPlace(uiName,'Label_9',463,118,70,29)
+        Fun.SetControlPlace(uiName,'Label_9',434,118,70,29)
         Label_9.configure(anchor = "w")
         Label_9.configure(relief = "flat")
         Button_17 = tkinter.Button(Form_1,text="微信路径")
@@ -111,6 +113,14 @@ class  evenydaynews:
         evenydaynews_cmd.Form_1_onLoad(uiName)
         #Add Some Logic Code Here: (Keep This Line of comments)
 
+
+        #Exit Application: (Keep This Line of comments)
+        if self.isTKroot == True:
+            self.root.protocol('WM_DELETE_WINDOW', self.exit)
+
+    def exit(self):
+        if self.isTKroot == True:
+            self.root.destroy()
 
 #Create the root of Kinter 
 if  __name__ == '__main__':
