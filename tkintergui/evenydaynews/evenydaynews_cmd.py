@@ -11,16 +11,13 @@ ElementBGArray={}
 ElementBGArray_Resize={} 
 ElementBGArray_IM={} 
 
-import io
 import time 
 import threading
 import daynewsmodule
 import peoplenewsmodule
 import wx_send
-sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 news_origins = ['https://www.163.com/dy/media/T1603594732083.html', 'http://www.people.com.cn/']
 user_types = ['weixin', 'QQ']
- # 记录当前正在运行的任务数
 runingCount = 0
 def reset():
     # 计算正在运行的任务
@@ -44,6 +41,8 @@ def RequestPeople(url, uiName, cb, next):
     newsResult = peoplenewsmodule.getNews(url, uiName, cb, next)
     Fun.SetText(uiName, 'news', newsResult)
 def get_news(uiName, next=None):
+    global runingCount
+    runingCount = runingCount + 1
     # 爬取新闻方法封装
     news_origin_index = Fun.GetSelectIndex(uiName, 'news_origin')
     news_origin = news_origins[news_origin_index]
@@ -55,10 +54,12 @@ def get_news(uiName, next=None):
 def send_weixin(user_list, content, cb):
     time.sleep(3)
     wx_send.send(user_list, content, cb)
-    print('微信发送消息') 
+    # print('微信发送消息') 
 def send_qq(user_list, content, cb):
-    print('QQ发送消息') 
+    # print('QQ发送消息') 
+    pass
 def send_news(uiName):
+    global runingCount
     # 获取新闻内容
     news_content = Fun.GetText(uiName, 'news')
     if len(news_content) == 0 or news_content == '\n':
@@ -75,6 +76,7 @@ def send_news(uiName):
     # 获取要发送的用户
     user_list = Fun.GetText(uiName, 'user_list')
     user_list_arr = user_list.split('\n')
+    user_list_arr = [user for user in user_list_arr if user != '']
     # print('2='*30)
     # print(user_list)
     # print(user_list_arr)
@@ -87,6 +89,7 @@ def send_news(uiName):
     user_type = user_types[user_type_index]
     # print('4='*30)
     # print(user_type)
+    runingCount = runingCount + 1
     # 启动程序
     os.system(exe_path0)
     time.sleep(1)
@@ -96,30 +99,26 @@ def send_news(uiName):
         sendThreading = threading.Thread(target=send_qq, args=(user_list_arr, news_content, reset))
     sendThreading.start()
 def Form_1_onLoad(uiName):
-    print('页面初始化')
+    # print('页面初始化')
+    pass
 def ComboBox_5_onSelect(event,uiName,widgetName):
     pass
 def Button_8_onCommand(uiName,widgetName):
     # 一键完成
-    global runingCount
     if not runingHandle():
         return
-    runingCount = 2
     get_news(uiName, send_news)
 def Button_18_onCommand(uiName,widgetName):
     # 爬取新闻
-    global runingCount
     if not runingHandle():
         return
-    runingCount = 1
     get_news(uiName)
 def Button_19_onCommand(uiName,widgetName):
     # 发送消息
     global runingCount
     if not runingHandle():
         return
-    runingCount = 1
-    print('6='*30)
+    # print('6='*30)
     news_content = Fun.GetText(uiName, 'news')
     if len(news_content) == 0 or news_content == '\n':
         Fun.MessageBox('新闻内容不能为空！')
@@ -141,3 +140,4 @@ def ComboBox_14_onSelect(event,uiName,widgetName):
     else:
         btn_type = user_type
     Fun.SetText(uiName, 'select_exe', '{}路径'.format(btn_type))
+
