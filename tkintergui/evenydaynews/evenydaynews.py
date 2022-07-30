@@ -14,10 +14,8 @@ import tkinter.font
 class  evenydaynews:
     def __init__(self,root,isTKroot = True):
         uiName = self.__class__.__name__
-        self.uiName = uiName
         Fun.Register(uiName,'UIClass',self)
         self.root = root
-        self.isTKroot = isTKroot
         Fun.Register(uiName,'root',root)
         style = evenydaynews_sty.SetupStyle()
         if isTKroot == True:
@@ -25,7 +23,7 @@ class  evenydaynews:
             Fun.CenterDlg(uiName,root,699,606)
             root['background'] = '#efefef'
         Form_1= tkinter.Canvas(root,width = 10,height = 4)
-        Form_1.pack(fill=BOTH,expand=True)
+        Form_1.place(x = 0,y = 0,width = 699,height = 606)
         Form_1.configure(bg = "#efefef")
         Form_1.configure(highlightthickness = 0)
         Fun.Register(uiName,'Form_1',Form_1)
@@ -73,27 +71,15 @@ class  evenydaynews:
         Fun.Register(uiName,'Button_8',Button_8,'get_and_start')
         Fun.SetControlPlace(uiName,'Button_8',463,541,192,50)
         Button_8.configure(command=lambda:evenydaynews_cmd.Button_8_onCommand(uiName,"Button_8"))
-        ComboBox_14_Variable = Fun.AddTKVariable(uiName,'ComboBox_14')
-        ComboBox_14 = tkinter.ttk.Combobox(Form_1,textvariable=ComboBox_14_Variable, state="readonly")
-        Fun.Register(uiName,'ComboBox_14',ComboBox_14,'user_type')
-        Fun.SetControlPlace(uiName,'ComboBox_14',554,27,125,30)
-        ComboBox_14.configure(state = "normal")
-        ComboBox_14["values"]=['微信用户','QQ用户']
-        ComboBox_14.current(0)
-        ComboBox_14.bind("<<ComboboxSelected>>",Fun.EventFunction_Adaptor(evenydaynews_cmd.ComboBox_14_onSelect,uiName=uiName,widgetName="ComboBox_14"))
         Text_16 = tkinter.Text(Form_1)
         Fun.Register(uiName,'Text_16',Text_16,'exe_path')
-        Fun.SetControlPlace(uiName,'Text_16',463,76,158,61)
+        Fun.SetControlPlace(uiName,'Text_16',463,76,216,37)
         Text_16.configure(relief = "sunken")
         Text_16_Scrollbar = tkinter.Scrollbar(Text_16,orient=tkinter.VERTICAL)
-        Text_16_Scrollbar.place(x = 138,y = 0,width = 20,height = 61)
+        Text_16_Scrollbar.place(x = 196,y = 0,width = 20,height = 37)
         Text_16_Scrollbar.config(command = Text_16.yview)
         Text_16.config(yscrollcommand = Text_16_Scrollbar.set)
         Fun.Register(uiName,'Text_16_Scrollbar',Text_16_Scrollbar)
-        Button_17 = tkinter.Button(Form_1,text="微信路径")
-        Fun.Register(uiName,'Button_17',Button_17,'select_exe')
-        Fun.SetControlPlace(uiName,'Button_17',630,76,54,56)
-        Button_17.configure(command=lambda:evenydaynews_cmd.Button_17_onCommand(uiName,"Button_17"))
         Button_18 = tkinter.Button(Form_1,text="爬新闻")
         Fun.Register(uiName,'Button_18',Button_18,'get_news')
         Fun.SetControlPlace(uiName,'Button_18',346,27,78,30)
@@ -104,23 +90,27 @@ class  evenydaynews:
         Button_19.configure(command=lambda:evenydaynews_cmd.Button_19_onCommand(uiName,"Button_19"))
         Label_9 = tkinter.Label(Form_1,text="发送用户：")
         Fun.Register(uiName,'Label_9',Label_9)
-        Fun.SetControlPlace(uiName,'Label_9',463,28,70,29)
+        Fun.SetControlPlace(uiName,'Label_9',463,118,70,29)
         Label_9.configure(anchor = "w")
         Label_9.configure(relief = "flat")
+        Button_17 = tkinter.Button(Form_1,text="微信路径")
+        Fun.Register(uiName,'Button_17',Button_17,'select_exe')
+        Fun.SetControlPlace(uiName,'Button_17',601,27,78,30)
+        Button_17.configure(command=lambda:evenydaynews_cmd.Button_17_onCommand(uiName,"Button_17"))
+        ComboBox_14_Variable = Fun.AddTKVariable(uiName,'ComboBox_14')
+        ComboBox_14 = tkinter.ttk.Combobox(Form_1,textvariable=ComboBox_14_Variable, state="readonly")
+        Fun.Register(uiName,'ComboBox_14',ComboBox_14,'user_type')
+        Fun.SetControlPlace(uiName,'ComboBox_14',463,27,125,30)
+        ComboBox_14.configure(state = "readonly")
+        ComboBox_14["values"]=['微信用户']
+        ComboBox_14.current(0)
+        ComboBox_14.bind("<<ComboboxSelected>>",Fun.EventFunction_Adaptor(evenydaynews_cmd.ComboBox_14_onSelect,uiName=uiName,widgetName="ComboBox_14"))
         #Inital all element's Data 
         Fun.InitElementData(uiName)
         #Call Form_1's OnLoad Function
         evenydaynews_cmd.Form_1_onLoad(uiName)
         #Add Some Logic Code Here: (Keep This Line of comments)
 
-
-        #Exit Application: (Keep This Line of comments)
-        if self.isTKroot == True:
-            self.root.protocol('WM_DELETE_WINDOW', self.exit)
-
-    def exit(self):
-        if self.isTKroot == True:
-            self.root.destroy()
 
 #Create the root of Kinter 
 if  __name__ == '__main__':

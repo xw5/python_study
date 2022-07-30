@@ -21,7 +21,7 @@ def send(users, content, callback = None):
         pyautogui.hotkey('enter')
         time.sleep(3)
         if callback:
-            callback(users_len, index)
+            callback()
         print(users_len, index + 1)
 # time.sleep(5)
 # users = ['文件传输助手']

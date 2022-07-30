@@ -4,7 +4,7 @@ from lxml import etree
 import time
 import random
 from fake_useragent import UserAgent
-def getNews(url):
+def getNews(url, uiName, callBack=None, next=None):
     ua = UserAgent()
     headers = {
         'User-Agent': ua.random
@@ -19,4 +19,9 @@ def getNews(url):
     news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
     print(news)
     newContent = '\n'.join(news[1:])
+    if callBack:
+        callBack()
+    if next:
+        next(uiName)
     return newContent
+
