@@ -10,7 +10,6 @@ import Fun
 ElementBGArray={}  
 ElementBGArray_Resize={} 
 ElementBGArray_IM={} 
-
 import time 
 import threading
 import daynewsmodule
@@ -19,7 +18,7 @@ import wx_send
 news_origins = ['https://www.163.com/dy/media/T1603594732083.html', 'http://www.people.com.cn/']
 user_types = ['weixin', 'QQ']
 runingCount = 0
-def reset():
+def reset(content = None):
     # 计算正在运行的任务
     global runingCount
     runingCount = runingCount - 1 
@@ -35,11 +34,9 @@ def runingHandle():
 def Request365(url, uiName, cb, next):
     # 爬网易每日新闻
     newsResult = daynewsmodule.getNews(url, uiName, cb, next)
-    Fun.SetText(uiName, 'news', newsResult)
 def RequestPeople(url, uiName, cb, next):
     # 爬人民日报新闻
     newsResult = peoplenewsmodule.getNews(url, uiName, cb, next)
-    Fun.SetText(uiName, 'news', newsResult)
 def get_news(uiName, next=None):
     global runingCount
     runingCount = runingCount + 1
@@ -52,22 +49,27 @@ def get_news(uiName, next=None):
         requestThreading = threading.Thread(target=RequestPeople, args=(news_origin, uiName, reset, next)) 
     requestThreading.start()
 def send_weixin(user_list, content, cb):
-    time.sleep(3)
+    # time.sleep(3)
     wx_send.send(user_list, content, cb)
     # print('微信发送消息') 
 def send_qq(user_list, content, cb):
     # print('QQ发送消息') 
     pass
-def send_news(uiName):
+def setNews(uiName, content):
+    Fun.SetText(uiName, 'news', content)
+def send_news(uiName, content):
     global runingCount
-    # 获取新闻内容
-    news_content = Fun.GetText(uiName, 'news')
-    if len(news_content) == 0 or news_content == '\n':
-        time.sleep(0.5)
+    if not content:
+        # 获取新闻内容
         news_content = Fun.GetText(uiName, 'news')
-    if len(news_content) == 0 or news_content == '\n':
-        Fun.MessageBox('新闻内容不能为空！')
-        return
+        if len(news_content) == 0 or news_content == '\n':
+            time.sleep(0.5)
+            news_content = Fun.GetText(uiName, 'news')
+        if len(news_content) == 0 or news_content == '\n':
+            Fun.MessageBox('新闻内容不能为空！')
+            return
+    else:
+        news_content = content
     news_suffix = Fun.GetText(uiName,'news_suffix')
     if len(news_suffix) > 0 and news_content != '\n':
         news_content = news_content + news_suffix
@@ -103,16 +105,19 @@ def Form_1_onLoad(uiName):
     pass
 def ComboBox_5_onSelect(event,uiName,widgetName):
     pass
+def oneStepNext(uiName, content):
+    setNews(uiName, content)
+    send_news(uiName)
 def Button_8_onCommand(uiName,widgetName):
     # 一键完成
     if not runingHandle():
         return
-    get_news(uiName, send_news)
+    get_news(uiName, oneStepNext)
 def Button_18_onCommand(uiName,widgetName):
     # 爬取新闻
     if not runingHandle():
         return
-    get_news(uiName)
+    get_news(uiName, setNews)
 def Button_19_onCommand(uiName,widgetName):
     # 发送消息
     global runingCount
@@ -140,4 +145,3 @@ def ComboBox_14_onSelect(event,uiName,widgetName):
     else:
         btn_type = user_type
     Fun.SetText(uiName, 'select_exe', '{}路径'.format(btn_type))
-

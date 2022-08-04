@@ -31,8 +31,7 @@ def getNews(url, uiName, callBack=None, next=None):
     newsArr = tempDateStr + news
     newContent = '\n'.join(newsArr)
     if callBack:
-        callBack()
+        callBack(newContent)
     if next:
-        next(uiName)
+        next(uiName, newContent)
     return newContent
-

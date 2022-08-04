@@ -20,8 +20,7 @@ def getNews(url, uiName, callBack=None, next=None):
     print(news)
     newContent = '\n'.join(news[1:])
     if callBack:
-        callBack()
+        callBack(newContent)
     if next:
-        next(uiName)
+        next(uiName, newContent)
     return newContent
-
