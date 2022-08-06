@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    version='F:\\python_study\\tkintergui\\evenydaynews\\version.txt',
+    version='H:\\study\\python\\python_study\\tkintergui\\evenydaynews\\version.txt',
 )
