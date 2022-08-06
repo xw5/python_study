@@ -3,9 +3,10 @@
 #此文件不支持直接编辑
 import os
 from   os.path import abspath, dirname
-from   PIL import Image,ImageTk
 import tkinter
 import tkinter.simpledialog
+from   PIL import Image,ImageTk
+import math
 
 G_UIElementArray={}
 G_UIElementPlaceArray={}
@@ -482,6 +483,23 @@ def GetSelectIndex(uiName,elementName):
             if len(currIndex) > 0 and currIndex[0] >= 0:
                 return currIndex[0]
     return -1
+def GetCurrentValue(uiName,elementName):
+    """取得控件的选中值（Scale,Progress,ListBox,ComboBox)。"""
+    if uiName in G_UIElementAlias.keys() and elementName in G_UIElementAlias[uiName].keys():
+        elementName = G_UIElementAlias[uiName][elementName]
+    Control = GetElement(uiName,elementName)
+    if Control != None:
+        if elementName.find('ComboBox_') == 0 :
+            return Control.get()
+        elif elementName.find('Scale_') == 0 :
+            return Control.get()
+        elif elementName.find('ListBox_') == 0 :
+            currIndex = Control.curselection()
+            if len(currIndex) > 0 and currIndex[0] >= 0:
+                return Control["values"][currIndex[0]]
+        elif elementName.find('Progress_') == 0 :
+            return Control["value"]
+    return -1
 def InitElementData(uiName):
     """初始化界面各控件初始数。参数1 :界面类名。"""
     global G_UIElementUserDataArray
@@ -491,6 +509,7 @@ def InitElementData(uiName):
                 if EBData[3] == 1:
                     SetText(uiName,elementName,EBData[2])
                     SetText(uiName,elementName,EBData[2])
+    LoadCanvasRecord(uiName)
 def InitElementStyle(uiName,Style):
     """初始化界面各控件初始样式。参数1 :界面类名, 参数2:样式名称。"""
     StyleArray = ReadStyleFile(Style+".py")
@@ -837,6 +856,162 @@ def SetControlPlace(uiName,elementName,x,y,w,h):
                         PlaceDictory["height"] = h
                         PlaceDictory["visible"] = True
                         G_UIElementPlaceArray[uiName][elementName]=PlaceDictory
+def DoCanvasRecord(drawCanvas,type,x,y,x2,y2,fillcolor,outlinecolor,fillwidth,dash1=0,dash2=0,newImage=None,text='',textFont = None,ShapeTag=''):
+    """画板动作处理函数"""
+    if  drawCanvas != None:
+        if type == 'line' or type == 'pen'  :
+            if  dash1 > 0 :
+                drawCanvas.create_line(x, y, x2, y2, fill=fillcolor,dash=(dash1,dash2),width = fillwidth,tag=ShapeTag)
+            else:
+                drawCanvas.create_line(x, y, x2, y2,fill=fillcolor, width = fillwidth,tag=ShapeTag)
+        elif type == 'arrow':
+            if  dash1 > 0 :
+                drawCanvas.create_line(x, y, x2, y2, arrow='arrow',fill=fillcolor,dash=(dash1,dash2),width = fillwidth,tag=ShapeTag)
+            else:
+                drawCanvas.create_line(x, y, x2, y2,arrow='arrow',fill=fillcolor, width = fillwidth,tag=ShapeTag)
+        elif type == 'triangle':
+            width = x2 - x
+            height = y2 - y
+            points = [
+                x,
+                y + height,
+                x + int(width/2),
+                y ,
+                x + width,
+                y + height,
+                x,
+                y + height,]
+            drawCanvas.create_polygon(
+                points,
+                fill=fillcolor,
+                outline=outlinecolor, 
+                width= fillwidth,
+                tag=ShapeTag)
+        elif type == 'rect':
+            if  dash1 > 0 :
+                drawCanvas.create_rectangle(x, y, x2, y2, fill=fillcolor,outline=outlinecolor,dash=(dash1,dash2),width = fillwidth,tag=ShapeTag)
+            else:
+                drawCanvas.create_rectangle(x, y, x2, y2,fill=fillcolor,outline=outlinecolor, width = fillwidth,tag=ShapeTag)
+        elif type == 'circle':
+            if  dash1 > 0 :
+                drawCanvas.create_oval(x, y, x2, y2, fill=fillcolor,outline=outlinecolor,dash=(dash1,dash2),width = fillwidth,tag=ShapeTag)
+            else:
+                drawCanvas.create_oval(x, y, x2, y2,fill=fillcolor,outline=outlinecolor, width = fillwidth,tag=ShapeTag)
+        elif type == 'star':
+            center_x = (x + x2)/2
+            center_y = (y + y2)/2
+            rx = (x2 - x)/2
+            ry = (y2 - y)/2
+            points = [
+                center_x - int(rx * math.sin(2 * math.pi / 5)),
+                center_y - int(ry * math.cos(2 * math.pi / 5)),
+                center_x + int(rx * math.sin(2 * math.pi / 5)),
+                center_y - int(ry * math.cos(2 * math.pi / 5)),
+                center_x - int(rx * math.sin(math.pi / 5)),
+                center_y + int(ry * math.cos(math.pi / 5)),
+                center_x,
+                center_y - ry,
+                center_x + int(rx * math.sin(math.pi / 5)),
+                center_y + int(ry * math.cos(math.pi / 5)),
+                ]
+            drawCanvas.create_polygon(
+                points,
+                fill=fillcolor,
+                outline=outlinecolor, 
+                width= fillwidth,
+                tag=ShapeTag)
+        elif type == 'earsor':
+            drawCanvas.create_rectangle(x, y, x2, y2,fill=fillcolor, width = 0,tag=ShapeTag) 
+        elif type == 'text':
+            drawCanvas.create_text(x, y,fill=fillcolor,text=text,font = textFont,anchor='nw',tag=ShapeTag)
+        elif type == 'image':
+            drawCanvas.create_image(x, y,image=newImage,anchor='nw',tag=ShapeTag)
+def LoadCanvasRecord(uiName):
+    """读取画板动作记录"""
+    drawCanvasName = None
+    drawCanvas = None
+    canvasFile = os.getcwd() + "\\Resources\\" + uiName + ".cav"
+    if os.path.exists(canvasFile) == True:
+        f = open(canvasFile,encoding='utf-8')
+        line ="" 
+        while True:
+            line = f.readline()
+            if not line:
+                break
+            text = line.strip()
+            if not text:
+                continue
+            if text.find('Canvas:') >= 0:
+                splitArray = text.split(':')
+                drawCanvasName = splitArray[1].strip()
+                drawCanvas = GetElement(uiName,drawCanvasName)
+                G_CanvasFontDictory[uiName][drawCanvasName] = []
+                G_CanvasImageDictory[uiName][drawCanvasName] = []
+                continue
+            elif text.find(',') >= 0:
+                if drawCanvas != None:
+                    splitArray = text.split(',')
+                    ShapeType = splitArray[0]
+                    x1 = int(splitArray[1])
+                    y1 = int(splitArray[2])
+                    x2= int(splitArray[3])
+                    y2= int(splitArray[4])
+                    w = x2 - x1
+                    h = y2 - y1
+                    fill = splitArray[5]
+                    outline = splitArray[6]
+                    width = int(splitArray[7])
+                    dashx = int(splitArray[8])
+                    dashy = int(splitArray[9])
+                    imagefile = ''
+                    newImage = None
+                    text = ''
+                    textFont = None
+                    ShapeTag = ''
+                    if len(splitArray) > 11:
+                        ShapeTag = splitArray[10]
+                    if ShapeType == 'image':
+                        imagefile = splitArray[10]
+                        if len(splitArray) > 12:
+                            ShapeTag = splitArray[11]
+                        for ImageInfo in G_CanvasImageDictory[uiName][drawCanvasName]:
+                            if ImageInfo[0] == imagefile and ImageInfo[2] == w and ImageInfo[3] == h :
+                                newImage = ImageInfo[1]
+                                continue
+                        if newImage == None:
+                            projPath = os.getcwd() 
+                            projPath = projPath.replace('/','\\')
+                            resourPath = projPath+"\\Resources\\"+imagefile
+                            if os.path.exists(resourPath) == True:
+                                try:
+                                    imageRGBA = Image.open(resourPath).convert('RGBA')
+                                    resizeImage = imageRGBA.resize((w, h),Image.ANTIALIAS)
+                                    newImage = ImageTk.PhotoImage(resizeImage)
+                                except:
+                                    return 
+                            G_CanvasImageDictory[uiName][drawCanvasName].append([imagefile,newImage,w,h])
+                    elif ShapeType == 'text':
+                        text = splitArray[10]
+                        familytext = splitArray[11]
+                        sizetext = splitArray[12]
+                        weighttext = splitArray[13]
+                        slanttext = splitArray[14]
+                        underlinetext = splitArray[15]
+                        overstriketext = splitArray[16]
+                        if len(splitArray) > 18:
+                            ShapeTag = splitArray[17]
+                        textFont = tkinter.font.Font(family=familytext, size=sizetext,weight=weighttext,slant=slanttext,underline=underlinetext,overstrike=overstriketext)
+                        #字体
+                        fontFind = False
+                        for fontInfo in G_CanvasFontDictory[uiName][drawCanvasName]:
+                            if fontInfo[0] == familytext and fontInfo[1] == sizetext and fontInfo[2] == weighttext and fontInfo[3] == slanttext and fontInfo[4] == underlinetext and fontInfo[5] == overstriketext:
+                                fontFind = True
+                                continue
+                        if fontFind == False:
+                            G_CanvasFontDictory[uiName][drawCanvasName].append([textFont,familytext,sizetext,weighttext,slanttext,underlinetext,overstriketext])
+                    DoCanvasRecord(drawCanvas,ShapeType,x1,y1,x2,y2,fill,outline,width,dashx,dashy,newImage,text,textFont,ShapeTag)
+                continue
+        f.close()  
 class WindowDraggable():
     """定义一个可拖拽移动和拖拽边框大小的窗口类。"""
     def __init__(self,widget,bordersize = 6,bordercolor = '#444444'):

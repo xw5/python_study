@@ -8,15 +8,16 @@ def enter_text(content):
     # pyperclip.paste()
     pyautogui.hotkey('ctrl', 'v')
 def send(users, content, callback = None):
+    pyautogui.hotkey('ctrl', 'alt', 'w')
+    time.sleep(1)
     users_len = len(users)
     for index, item in enumerate(users):
         pyautogui.hotkey('ctrl', 'f')
         time.sleep(1)
         print(item)
         enter_text(item)
-        time.sleep(2)
         pyautogui.hotkey('enter')
-        time.sleep(1)
+        time.sleep(2)
         enter_text(content)
         pyautogui.hotkey('enter')
         time.sleep(3)
@@ -26,4 +27,3 @@ def send(users, content, callback = None):
 # time.sleep(5)
 # users = ['文件传输助手']
 # send(users, 'hello tkinter')
-

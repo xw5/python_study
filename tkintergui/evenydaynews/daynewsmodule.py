@@ -4,6 +4,8 @@ from lxml import etree
 import time
 import random
 from fake_useragent import UserAgent
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 def getNews(url, uiName, callBack=None, next=None):
     ua = UserAgent()
     headers = {

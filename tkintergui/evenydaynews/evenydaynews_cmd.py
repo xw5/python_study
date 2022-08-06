@@ -10,6 +10,7 @@ import Fun
 ElementBGArray={}  
 ElementBGArray_Resize={} 
 ElementBGArray_IM={} 
+
 import time 
 import threading
 import daynewsmodule
@@ -48,11 +49,20 @@ def get_news(uiName, next=None):
     else:
         requestThreading = threading.Thread(target=RequestPeople, args=(news_origin, uiName, reset, next)) 
     requestThreading.start()
-def send_weixin(user_list, content, cb):
+def send_weixin(uiName, user_list, content, cb):
+    # 获取程序路径
+    # exe_path0 = Fun.GetText(uiName, 'exe_path')
+    # print('3='*30)
+    # print(exe_path0)
+    # 启动程序
+    # os.startfile(exe_path0)
+    # os.system('"{}"'.format(exe_path0))
+    # win32api.ShellExecute(0, 'open', exe_path0, '','',1)
+    # time.sleep(3)
     # time.sleep(3)
     wx_send.send(user_list, content, cb)
     # print('微信发送消息') 
-def send_qq(user_list, content, cb):
+def send_qq(uiName, user_list, content, cb):
     # print('QQ发送消息') 
     pass
 def setNews(uiName, content):
@@ -82,32 +92,25 @@ def send_news(uiName, content):
     # print('2='*30)
     # print(user_list)
     # print(user_list_arr)
-    # 获取程序路径
-    exe_path0 = Fun.GetText(uiName, 'exe_path')
-    # print('3='*30)
-    # print(exe_path0)
     # 获取当前发送类别（微信）
     user_type_index = Fun.GetSelectIndex(uiName, 'user_type')
     user_type = user_types[user_type_index]
     # print('4='*30)
     # print(user_type)
     runingCount = runingCount + 1
-    # 启动程序
-    os.system(exe_path0)
-    time.sleep(1)
     if user_type == 'weixin':
-        sendThreading = threading.Thread(target=send_weixin, args=(user_list_arr, news_content, reset))
+        sendThreading = threading.Thread(target=send_weixin, args=(uiName, user_list_arr, news_content, reset))
     elif user_type == 'QQ':
-        sendThreading = threading.Thread(target=send_qq, args=(user_list_arr, news_content, reset))
+        sendThreading = threading.Thread(target=send_qq, args=(uiName, user_list_arr, news_content, reset))
     sendThreading.start()
+def oneStepNext(uiName, content):
+    setNews(uiName, content)
+    send_news(uiName, content)
 def Form_1_onLoad(uiName):
     # print('页面初始化')
     pass
 def ComboBox_5_onSelect(event,uiName,widgetName):
     pass
-def oneStepNext(uiName, content):
-    setNews(uiName, content)
-    send_news(uiName)
 def Button_8_onCommand(uiName,widgetName):
     # 一键完成
     if not runingHandle():
@@ -120,7 +123,6 @@ def Button_18_onCommand(uiName,widgetName):
     get_news(uiName, setNews)
 def Button_19_onCommand(uiName,widgetName):
     # 发送消息
-    global runingCount
     if not runingHandle():
         return
     # print('6='*30)
@@ -128,20 +130,7 @@ def Button_19_onCommand(uiName,widgetName):
     if len(news_content) == 0 or news_content == '\n':
         Fun.MessageBox('新闻内容不能为空！')
         return
-    send_news(uiName)
-def Button_17_onCommand(uiName,widgetName):
-    # 选取程序路径
-    if not runingHandle():
-        return
-    exe_path = tkinter.filedialog.askopenfilename()
-    print(exe_path)
-    Fun.SetText(uiName, 'exe_path', exe_path)
+    send_news(uiName, news_content)
 def ComboBox_14_onSelect(event,uiName,widgetName):
-    # 切换程序类别，目前只支持微信
-    user_type_index = Fun.GetSelectIndex(uiName, 'user_type')
-    user_type = user_types[user_type_index]
-    if user_type == 'weixin':
-        btn_type = '微信'
-    else:
-        btn_type = user_type
-    Fun.SetText(uiName, 'select_exe', '{}路径'.format(btn_type))
+    pass
+
