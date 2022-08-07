@@ -33,7 +33,7 @@ def getTimeStr():
     curr_time = datetime.datetime.now()
     newsFileName = curr_time.strftime("%Y%m%d%H%M%S")
     return newsFileName
-def start_copy(orign_path, target_path, maxRows, subpackagePre, uiName, callback):
+def start_copy_rows(orign_path, target_path, maxRows, subpackagePre, uiName, callback, endCb):
     # 生成时间字符串
     # curr_time = datetime.datetime.now()
     # newsFileName = curr_time.strftime("%Y%m%d%H%M%S")
@@ -62,7 +62,7 @@ def start_copy(orign_path, target_path, maxRows, subpackagePre, uiName, callback
     for file in files:
         fileName = file.split('\\')[-1]
         fileNameArr = fileName.split('.')
-        print(file)
+        # print(file)
         callback(uiName, total, copyFileCount, copyErrorFileCount)
         try:
             count = len(open(file, 'r', encoding='utf-8').readlines())
@@ -72,16 +72,16 @@ def start_copy(orign_path, target_path, maxRows, subpackagePre, uiName, callback
                 newFileDir = newFileDir + 1
                 # zipHandle.close()
                 # zipHandle = ZipFile('{}\\{}.zip'.format(target_path, newFileDir), 'w')
-            tempDir = target_path + '\\' + subpackagePre + str(newFileDir)
-            print(tempDir)
+            tempDir = target_path + '\\' + subpackagePre + '_' + str(newFileDir)
+            # print(tempDir)
             copyFileNames.append(fileName)
             copyFileCount = copyFileCount + 1
             if not os.path.exists(tempDir):
-                os.mkdir(tempDir)
-            target_file = target_path + '\\' + subpackagePre + str(newFileDir) + '\\' +fileName;
+                os.makedirs(tempDir)
+            target_file = tempDir + '\\' +fileName;
             if os.path.exists(target_file):
                 repeatIndex = repeatIndex + 1
-                target_file = target_path + '\\' + subpackagePre + str(newFileDir) + '\\' + fileNameArr[0] + str(repeatIndex) + '.' + fileNameArr[1];
+                target_file = target_path + '\\' + subpackagePre + '_' + str(newFileDir) + '\\' + '.'.join(fileNameArr[0:-1]) + str(repeatIndex) + '.' + fileNameArr[-1];
             shutil.copyfile(file, target_file)
             # shutil.move(file, target_path + '\\' + str(newFileDir) + '\\' + fileName)
             # zipHandle.write(file)
@@ -89,11 +89,67 @@ def start_copy(orign_path, target_path, maxRows, subpackagePre, uiName, callback
             copyErrorFileNames.append(fileName)
             copyErrorFileCount = copyErrorFileCount + 1
             # zipHandle.close()
-    print("=" * 20)
-    print('操作成功的文件列表：{}，成功文件数{}'.format('\n'.join(copyFileNames), copyFileCount))
-    print("=" * 20)
-    print('操作失败的文件列表：{}，失败文件数{}'.format('\n'.join(copyErrorFileNames), copyErrorFileCount))
-    print("=" * 20)
-    return { 'copyFileNames': copyFileNames, 'copyFileCount': copyFileCount, 'copyErrorFileNames': copyErrorFileNames, 'copyErrorFileCount': copyErrorFileCount }
+    # print("=" * 20)
+    # print('操作成功的文件列表：{}，成功文件数{}'.format('\n'.join(copyFileNames), copyFileCount))
+    # print("=" * 20)
+    # print('操作失败的文件列表：{}，失败文件数{}'.format('\n'.join(copyErrorFileNames), copyErrorFileCount))
+    # print("=" * 20)
+    result = { 'copyFileNames': copyFileNames, 'copyFileCount': copyFileCount, 'copyErrorFileNames': copyErrorFileNames, 'copyErrorFileCount': copyErrorFileCount }
+    if endCb:
+        endCb(uiName, result)
+    return result
 # start_copy('D:\work\workspace\microLearning_web\src', 'D:\work\workspace\ok', 300000, 'code')
-
+def start_copy_suffix(orign_path, target_path, subpackagePre, uiName, callback, endCb):
+    # 创建日期目录
+    if not os.path.exists(target_path):
+        os.makedirs(target_path)
+    # 读取文件
+    files = find_file(orign_path)
+    # 移入的文件夹名 以文件后辍命名
+    newFileDir = ''
+    # 存储已经完成操作的文件
+    copyFileNames = []
+    copyErrorFileNames = []
+    # 存储已经完成操作的文件数量
+    copyFileCount = 0
+    copyErrorFileCount = 0
+    repeatIndex = 0
+    total = len(files)
+    # zipHandle = ZipFile('{}\\{}.zip'.format(target_path, newFileDir), 'w')
+    for file in files:
+        fileName = file.split('\\')[-1]
+        fileNameArr = fileName.split('.')
+        print(file)
+        tempDir = ''
+        try:
+            if newFileDir != fileNameArr[-1]:
+                newFileDir = fileNameArr[-1]
+                # zipHandle.close()
+                # zipHandle = ZipFile('{}\\{}.zip'.format(target_path, newFileDir), 'w')
+                tempDir = target_path + '\\' + subpackagePre + '_' + str(newFileDir)
+                print(tempDir)
+                if not os.path.exists(tempDir):
+                    os.makedirs(tempDir)
+            copyFileNames.append(fileName)
+            copyFileCount = copyFileCount + 1
+            target_file = tempDir + '\\' +fileName
+            if os.path.exists(target_file):
+                repeatIndex = repeatIndex + 1
+                target_file = target_path + '\\' + subpackagePre + '_' + str(newFileDir) + '\\' + '.'.join(fileNameArr[0:-1]) + str(repeatIndex) + '.' + fileNameArr[-1]
+            shutil.copyfile(file, target_file)
+            # shutil.move(file, target_path + '\\' + str(newFileDir) + '\\' + fileName)
+            # zipHandle.write(file)
+        except Exception as err:
+            copyErrorFileNames.append(fileName)
+            copyErrorFileCount = copyErrorFileCount + 1
+            # zipHandle.close()
+        callback(uiName, total, copyFileCount, copyErrorFileCount)
+    # print("=" * 20)
+    # print('操作成功的文件列表：{}，成功文件数{}'.format('\n'.join(copyFileNames), copyFileCount))
+    # print("=" * 20)
+    # print('操作失败的文件列表：{}，失败文件数{}'.format('\n'.join(copyErrorFileNames), copyErrorFileCount))
+    # print("=" * 20)
+    result = { 'copyFileNames': copyFileNames, 'copyFileCount': copyFileCount, 'copyErrorFileNames': copyErrorFileNames, 'copyErrorFileCount': copyErrorFileCount }
+    if endCb:
+        endCb(uiName, result)
+    return result

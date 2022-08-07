@@ -41,6 +41,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    version='F:\\python_study\\tkintergui\\file_helpers\\version.txt',
+    version='H:\\study\\python\\python_study\\tkintergui\\file_helpers\\version.txt',
     icon='F:\\python_study\\tkintergui\\file_helpers\\file-sync.ico',
 )
