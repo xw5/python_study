@@ -7,7 +7,7 @@ import datetime
 # from txtToAudioModule import textToAudio
 import warnings
 warnings.filterwarnings("ignore")
-os.chdir(r"E:\study\python\python_reptile\365news")
+os.chdir(r"E:\study\python_study\365news")
 
 def getNews():
 
@@ -18,7 +18,7 @@ def getNews():
     res = requests.get(url='https://www.163.com/dy/media/T1603594732083.html', headers=headers, verify=False)
 
     selecter = etree.HTML(res.text)
-    # print(res.text)
+    print(res.text)
     url = selecter.xpath("//div[@class='tab_content']/ul/li/a/@href")[0]
     dateStr = selecter.xpath("//div[@class='tab_content']/ul/li/div[@class='desc']/div/span/text()")[0]
     dateStr = dateStr.replace("-", "")
@@ -33,10 +33,10 @@ def getNews():
 
     selecterDetail = etree.HTML(resDetail.text)
 
-    news = selecterDetail.xpath("//div[@class='post_body']/p[2]/text()")
+    news = selecterDetail.xpath("//div[@class='post_body']/p['id']/text()")
 
     print(news)
-    newContent = '\n'.join(news[1:])
+    newContent = '\n'.join(news[1:-1])
     with open('./new.txt', 'w', encoding='utf-8') as f0:
         f0.write(newContent)
     with open('./{}.txt'.format(dateStr), 'w', encoding='utf-8') as f1:
@@ -48,9 +48,11 @@ newsFileName = curr_time.strftime("%Y%m%d")
 print('今天是{}'.format(newsFileName))
 time.sleep(5)
 
+getNews();
+
 # 判断今天新闻是否已经爬取过
-if os.path.exists('{}.txt'.format(newsFileName)):
-    print('已爬取过最新新闻')
-else:
-    getNews()
+# if os.path.exists('{}.txt'.format(newsFileName)):
+#     print('已爬取过最新新闻')
+# else:
+#     getNews()
 
